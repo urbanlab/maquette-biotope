@@ -13,9 +13,10 @@
 #error "Requires FastLED 3.1 or later; check github for latest code."
 #endif
 
-#define DATA_PIN_LINES    6
-#define DATA_PIN_ZONES    5
-#define HEART_PIN   3
+#define DATA_PIN_LINES    5
+#define DATA_PIN_ZONES    6
+#define DATA_PIN_WIFI1    3
+#define DATA_PIN_WIFI2    9
 //#define CLK_PIN   4
 #define LED_TYPE    NEOPIXEL
 
@@ -28,23 +29,30 @@ CRGB zones[NUM_LEDS_ARROSAGES];
 #define NUM_LEDS_ZONE2    10
 CRGB leds[NUM_LEDS_ZONE2];
 
+#define NUM_LEDS_WIFI   1
+CRGB wifi1[NUM_LEDS_WIFI];
+CRGB wifi2[NUM_LEDS_WIFI];
+
 #define BRIGHTNESS         100
 #define FRAMES_PER_SECOND  120
 
 void setup() {
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
-  pinMode(HEART_PIN, INPUT_PULLUP);
   Serial.begin(9600);
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN_LINES>(leds, NUM_LEDS_ZONE2).setCorrection(TypicalLEDStrip);
   FastLED.addLeds<LED_TYPE, DATA_PIN_ZONES>(zones, NUM_LEDS_ARROSAGES).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_WIFI1>(wifi1, NUM_LEDS_WIFI).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE, DATA_PIN_WIFI2>(wifi2, NUM_LEDS_WIFI).setCorrection(TypicalLEDStrip);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
   // All leds black
   leds[0] = CRGB::Black;
   zones[0] = CRGB::Black;
+  wifi1[0] = CRGB::Black;
+  wifi2[0] = CRGB::Black;
   FastLED.show();
 }
 
@@ -57,8 +65,10 @@ void loop()
   // Line
   //ligne(NUM_LEDS_ZONE1);
   ligne(NUM_LEDS_ZONE2);
-  // arrosage(ZONE1);
-  // arrosage(ZONE2);
+  arrosage(ZONE1);
+  arrosage(ZONE2);
+  wifi(1);
+  wifi(2);
   // send the 'leds' array out to the actual LED strip
   FastLED.show();
   // insert a delay to keep the framerate modest
@@ -71,9 +81,25 @@ void loop()
 
 }
 
+
+void wifi(int num)
+{
+  // a colored dot sweeping back and forth, with fading trails
+  CRGBPalette16 palette = LavaColors_p;
+  //int pos = beatsin16(13, 0, NUM_LEDS_WIFI);
+  if ( num == 1) {
+  fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
+    wifi1[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
+  } else {
+  fadeToBlackBy( wifi2, NUM_LEDS_WIFI, 20);
+    wifi2[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
+  }
+}
+
 void arrosage(int z) {
   CRGBPalette16 palette = OceanColors_p;
   int offset = 0;
+  int pos = beatsin16(13, 0, NUM_LEDS_ARROSAGES);
   if ( z == ZONE2 ) {
     offset = 3;
   }
