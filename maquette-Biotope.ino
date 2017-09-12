@@ -88,10 +88,10 @@ void wifi(int num)
   CRGBPalette16 palette = LavaColors_p;
   //int pos = beatsin16(13, 0, NUM_LEDS_WIFI);
   if ( num == 1) {
-  fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
+    fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
     wifi1[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
   } else {
-  fadeToBlackBy( wifi2, NUM_LEDS_WIFI, 20);
+    fadeToBlackBy( wifi2, NUM_LEDS_WIFI, 20);
     wifi2[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
   }
 }
@@ -103,7 +103,7 @@ void arrosage(int z) {
   if ( z == ZONE2 ) {
     offset = 3;
   }
-  for ( int i = offset ; i < 3+offset ; i ++) {
+  for ( int i = offset ; i < 3 + offset ; i ++) {
     zones[i] = ColorFromPalette(palette, gHue + (pos * 2), gHue + (pos * 10));
   }
 }
