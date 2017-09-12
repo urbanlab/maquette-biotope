@@ -1,4 +1,5 @@
 #include "FastLED.h"
+#include <Wire.h>
 
 // FastLED "100-lines-of-code" demo reel, showing just a few
 // of the kinds of animation patterns you can quickly and easily
@@ -12,6 +13,9 @@
 #if FASTLED_VERSION < 3001000
 #error "Requires FastLED 3.1 or later; check github for latest code."
 #endif
+
+// Slave I2C address to receive commands
+#define SLAVE_I2C_ADDRESS 9
 
 #define DATA_PIN_LINES    5
 #define DATA_PIN_ZONES    6
@@ -35,11 +39,18 @@ CRGB wifi2[NUM_LEDS_WIFI];
 
 #define BRIGHTNESS         100
 #define FRAMES_PER_SECOND  120
+#define LIGHTING_PERIOD    13
+
+uint8_t gHue = 0; // rotating "base color" used by many of the patterns
+int pos = 0;
+int posCount = 0;
+int commande = 1; // Valeur de la commande reçue via I2C depuis le master
+String debugMsg, previousMsg = "";
+boolean b_ligne1, b_ligne2, b_zone1, b_zone2, b_wifi1, b_wifi2 = false;
 
 void setup() {
-  pinMode(4, OUTPUT);
-  digitalWrite(4, HIGH);
   Serial.begin(9600);
+
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN_LINES>(leds, NUM_LEDS_ZONE2).setCorrection(TypicalLEDStrip);
   FastLED.addLeds<LED_TYPE, DATA_PIN_ZONES>(zones, NUM_LEDS_ARROSAGES).setCorrection(TypicalLEDStrip);
@@ -54,21 +65,99 @@ void setup() {
   wifi1[0] = CRGB::Black;
   wifi2[0] = CRGB::Black;
   FastLED.show();
-}
 
-uint8_t gHue = 0; // rotating "base color" used by many of the patterns
-int pos = 0;
-int posCount = 0;
+  // I 2 C communication
+  // Start the I2C Bus as Slave on address 9
+  Wire.begin(SLAVE_I2C_ADDRESS);
+  // Attach a function to trigger when something is received.
+  Wire.onReceive(receiveEvent);
+
+  // Le wifi est toujours allumé
+  b_wifi1 = true;
+  b_wifi2 = true;
+}
 
 void loop()
 {
-  // Line
-  //ligne(NUM_LEDS_ZONE1);
-  ligne(NUM_LEDS_ZONE2);
-  arrosage(ZONE1);
-  arrosage(ZONE2);
-  wifi(1);
-  wifi(2);
+  if (Serial.available()) {
+    commande = Serial.read();
+  }
+  // Getting the command
+  switch (char(commande)) {
+    case '1' : // Allumage ligne data vers zone 1
+      debugMsg = "Transmission data vers zone 1";
+      b_ligne1 = true;
+      b_ligne2 = false;
+      break;
+
+    case '2' : // Extinction ligne data zone 1
+      debugMsg = "Extinction zone 1";
+      b_ligne1 = false;
+      break;
+
+    case '3' : // Allumage ligne data vers zone 2
+      debugMsg = "Transmission data vers zone 2";
+      b_ligne1 = false;
+      b_ligne2 = true;
+      break;
+
+    case '4' : // Extinction ligne data zone 2
+      debugMsg = "Extinction zone 2";
+      b_ligne2 = false;
+      break;
+
+    case '5' : // Arrosage zone 1
+      debugMsg = "Arrosage zone 1";
+      b_zone1 = true;
+      break;
+
+    case '6' : // Extinction Arrosage zone 1
+      debugMsg = "Extinction Arrosage zone 1";
+      b_zone1 = false;
+      break;
+
+    case '7' : // Arrosage zone 2
+      debugMsg = "Arrosage zone 2";
+      b_zone2 = true;
+      break;
+
+    case '8' : // Extinction Arrosage zone 2
+      debugMsg = "Extinction Arrosage zone 2";
+      b_zone2 = false;
+      break;
+
+    default :
+      debugMsg = "Waiting for commands...";
+  }
+
+  // Les arbres wifi sont toujours allumés
+  if (b_wifi1) {
+    wifi(1);
+  }
+  if (b_wifi2) {
+    wifi(2);
+  }
+  if (b_ligne1) {
+    ligne(NUM_LEDS_ZONE1);
+  }
+  if (b_ligne2) {
+    ligne(NUM_LEDS_ZONE2);
+  }
+  if (b_zone1) {
+    arrosage(ZONE1);
+  } else {
+    stoparrosage(ZONE1);
+  }
+  if (b_zone2) {
+    arrosage(ZONE2);
+  } else {
+    stoparrosage(ZONE2);
+  }
+
+  if (!b_ligne1 && !b_ligne2) {
+    stopligne();
+  }
+  // Showing LEDS
   // send the 'leds' array out to the actual LED strip
   FastLED.show();
   // insert a delay to keep the framerate modest
@@ -79,14 +168,28 @@ void loop()
     gHue++;  // slowly cycle the "base color" through the rainbow
   }
 
+  // Displays debugMsg
+  dislayMsg();
 }
 
+void dislayMsg() {
+  if ( previousMsg != debugMsg ) {
+    Serial.println( debugMsg );
+    previousMsg = debugMsg;
+  }
+}
+
+// read one character from the I2C
+void receiveEvent(int bytes) {
+  commande = Wire.read();
+  debugMsg = "Read command : " + String(commande);
+}
 
 void wifi(int num)
 {
   // a colored dot sweeping back and forth, with fading trails
   CRGBPalette16 palette = LavaColors_p;
-  //int pos = beatsin16(13, 0, NUM_LEDS_WIFI);
+  //int pos = beatsin16(LIGHTING_PERIOD, 0, NUM_LEDS_WIFI);
   if ( num == 1) {
     fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
     wifi1[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
@@ -99,7 +202,7 @@ void wifi(int num)
 void arrosage(int z) {
   CRGBPalette16 palette = OceanColors_p;
   int offset = 0;
-  int pos = beatsin16(13, 0, NUM_LEDS_ARROSAGES);
+  int pos = beatsin16(LIGHTING_PERIOD, 0, NUM_LEDS_ARROSAGES);
   if ( z == ZONE2 ) {
     offset = 3;
   }
@@ -108,13 +211,25 @@ void arrosage(int z) {
   }
 }
 
+
+void stoparrosage(int z) {
+  // All leds black
+  int offset = 0;
+  if ( z == ZONE2 ) {
+    offset = 3;
+  }
+  for ( int i = offset ; i < 3 + offset ; i ++) {
+    zones[i] = CRGB::Black;
+  }
+}
+
 void ligne(int total_leds)
 {
   CRGBPalette16 palette = ForestColors_p;
   // a colored dot sweeping back and forth, with fading trails
   fadeToBlackBy( leds, total_leds, 20);
-  //beatsin16(13, 0, total_leds)
-  if (posCount < 13 ) {
+  //beatsin16(LIGHTING_PERIOD, 0, total_leds)
+  if (posCount < LIGHTING_PERIOD ) {
     posCount++;
   } else {
     pos++;
@@ -123,8 +238,13 @@ void ligne(int total_leds)
   if ( pos == total_leds ) {
     pos = 0;
   }
-  Serial.println(pos);
   leds[pos] += ColorFromPalette(palette, gHue + (pos * 2), gHue + (pos * 10)); // CRGB::Blue; //CHSV( gHue, 255, 192);
+}
 
+void stopligne() {
+  // All leds black
+  for ( int i = 0 ; i < NUM_LEDS_ZONE2 ; i ++) {
+    leds[i] = CRGB::Black;
+  }
 }
 
