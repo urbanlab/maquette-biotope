@@ -81,53 +81,7 @@ void loop()
 {
   if (Serial.available()) {
     commande = Serial.read();
-  }
-  // Getting the command
-  switch (char(commande)) {
-    case '1' : // Allumage ligne data vers zone 1
-      debugMsg = "Transmission data vers zone 1";
-      b_ligne1 = true;
-      b_ligne2 = false;
-      break;
-
-    case '2' : // Extinction ligne data zone 1
-      debugMsg = "Extinction zone 1";
-      b_ligne1 = false;
-      break;
-
-    case '3' : // Allumage ligne data vers zone 2
-      debugMsg = "Transmission data vers zone 2";
-      b_ligne1 = false;
-      b_ligne2 = true;
-      break;
-
-    case '4' : // Extinction ligne data zone 2
-      debugMsg = "Extinction zone 2";
-      b_ligne2 = false;
-      break;
-
-    case '5' : // Arrosage zone 1
-      debugMsg = "Arrosage zone 1";
-      b_zone1 = true;
-      break;
-
-    case '6' : // Extinction Arrosage zone 1
-      debugMsg = "Extinction Arrosage zone 1";
-      b_zone1 = false;
-      break;
-
-    case '7' : // Arrosage zone 2
-      debugMsg = "Arrosage zone 2";
-      b_zone2 = true;
-      break;
-
-    case '8' : // Extinction Arrosage zone 2
-      debugMsg = "Extinction Arrosage zone 2";
-      b_zone2 = false;
-      break;
-
-    default :
-      debugMsg = "Waiting for commands...";
+    choice();
   }
 
   // Les arbres wifi sont toujours allumés
@@ -183,7 +137,59 @@ void dislayMsg() {
 void receiveEvent(int bytes) {
   commande = Wire.read();
   debugMsg = "Read command : " + String(commande);
+  choice();
 }
+
+void choice() {
+  // Getting the command
+  switch (char(commande)) {
+    case '1' : // Allumage ligne data vers zone 1
+      debugMsg = "Transmission data vers zone 1";
+      b_ligne1 = true;
+      b_ligne2 = false;
+      break;
+
+    case '2' : // Extinction ligne data zone 1
+      debugMsg = "Extinction zone 1";
+      b_ligne1 = false;
+      break;
+
+    case '3' : // Allumage ligne data vers zone 2
+      debugMsg = "Transmission data vers zone 2";
+      b_ligne1 = false;
+      b_ligne2 = true;
+      break;
+
+    case '4' : // Extinction ligne data zone 2
+      debugMsg = "Extinction zone 2";
+      b_ligne2 = false;
+      break;
+
+    case '5' : // Arrosage zone 1
+      debugMsg = "Arrosage zone 1";
+      b_zone1 = true;
+      break;
+
+    case '6' : // Extinction Arrosage zone 1
+      debugMsg = "Extinction Arrosage zone 1";
+      b_zone1 = false;
+      break;
+
+    case '7' : // Arrosage zone 2
+      debugMsg = "Arrosage zone 2";
+      b_zone2 = true;
+      break;
+
+    case '8' : // Extinction Arrosage zone 2
+      debugMsg = "Extinction Arrosage zone 2";
+      b_zone2 = false;
+      break;
+
+    default :
+      debugMsg = "Waiting for commands...";
+  }
+}
+
 
 void wifi(int num)
 {
