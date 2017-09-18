@@ -1,14 +1,50 @@
+/*--------------------------------------------------------------------
+  Maquette Biotope - Pierre-Gilles Levallois - pgl@erasme.org
+----------------------------------------------------------------------
+  Septembre 2017
+----------------------------------------------------------------------
+
+Fonctionnement : 
+~~~~~~~~~~~~~~~~
+    - 2 zones d'arrosage avec chacune un arbre connecte
+    - Une ligne de transmission de donnees separees en 2  paries (zone 1 et zone 2)
+
+  La simulation est pilotable par la console Serial de l'IDE Arduino et aussi
+  por une liaison I2C.
+  Dans le cadre de la liaison par I2C, le code pour le master I2C est le suivant :
+
+  --8<------8<------8<------8<------8<------8<------8<------8<------
+
+// Include the required Wire library for I2C
+#include <Wire.h>
+  void setup() {
+    // Start the I2C Bus as Master
+    Wire.begin(); 
+  }
+  
+  void loop() {
+    Wire.beginTransmission(9); // transmit to device #9
+    Wire.write("...");              // sends something 
+    Wire.endTransmission();    // stop transmitting
+  }
+
+  --8<------8<------8<------8<------8<------8<------8<------8<------
+
+Commandes disponibles : 
+~~~~~~~~~~~~~~~~~~~~~~~
+
+  - '1' : // Allumage ligne data vers zone 1
+  - '2' : // Extinction ligne data zone 1
+  - '3' : // Allumage ligne data vers zone 2
+  - '4' : // Extinction ligne data zone 2
+  - '5' : // Arrosage zone 1
+  - '6' : // Extinction Arrosage zone 1
+  - '7' : // Arrosage zone 2
+  - '8' : // Extinction Arrosage zone 2
+ 
+--------------------------------------------------------------------*/
 #include "FastLED.h"
 #include <Wire.h>
-
-// FastLED "100-lines-of-code" demo reel, showing just a few
-// of the kinds of animation patterns you can quickly and easily
-// compose using FastLED.
-//
-// This example also shows one easy way to define multiple
-// animations patterns and have them automatically rotate.
-//
-// -Mark Kriegsman, December 2014
 
 #if FASTLED_VERSION < 3001000
 #error "Requires FastLED 3.1 or later; check github for latest code."
