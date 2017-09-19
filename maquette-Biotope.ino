@@ -73,7 +73,7 @@ CRGB leds[NUM_LEDS_ZONE2];
 CRGB wifi1[NUM_LEDS_WIFI];
 CRGB wifi2[NUM_LEDS_WIFI];
 
-#define BRIGHTNESS         100
+#define BRIGHTNESS         255
 #define FRAMES_PER_SECOND  120
 #define LIGHTING_PERIOD    13
 
