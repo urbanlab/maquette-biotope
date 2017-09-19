@@ -66,7 +66,7 @@ Commandes disponibles :
 CRGB zones[NUM_LEDS_ARROSAGES];
 
 #define NUM_LEDS_ZONE1    4
-#define NUM_LEDS_ZONE2    10
+#define NUM_LEDS_ZONE2    9 //10
 CRGB leds[NUM_LEDS_ZONE2];
 
 #define NUM_LEDS_WIFI   1
@@ -114,7 +114,7 @@ void setup() {
 }
 
 void loop()
-{
+{ 
   if (Serial.available()) {
     commande = Serial.read();
     choice();
