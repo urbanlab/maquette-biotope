@@ -1,0 +1,1 @@
+curl -X POST http://localhost:8080 --data @O-MI-node-bootstrap.xml -H 'Content-Type:text/xml'

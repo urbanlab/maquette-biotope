@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<meta charset="utf-8">
+
+<head>
+	<title>bIoTope Heat Wave Mitigation Demo</title>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script> -->
+  <script src="/moment/min/moment.min.js"></script>
+
+	<script src="/chart.js/dist/Chart.min.js"></script>
+	<script src="/chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.5/chartjs-plugin-annotation.js'></script> -->
+
+
+	<!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js'></script> -->
+  <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.5/chartjs-plugin-annotation.js'></script> -->
+  <!-- <script src='utils.js'></script> -->
+	<style>
+
+		html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      border: 0;
+      overflow: hidden;
+      display: block;
+    }
+
+		canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+				display:block;
+				/*border:2px solid;*/
+				width:100vw;
+				/*height:20vh;*/
+				/*background-color: #666;*/
+				/*max-width: 80vw;*/
+				max-height: 60vh;
+    }
+
+		h1 {
+			text-align: center;
+			font-family: "Arial";
+		}
+
+		h2 {
+			text-align: center;
+			font-family: "Arial";
+			font-style: italic;
+		}
+
+		h3 {
+			font-family: "Arial";
+		}
+
+		p {
+    	font-family: "Arial";
+		}
+
+		.column-left{ float: left; width: 33%; }
+		.column-right{ float: right; width: 33%; }
+		.column-center{ display: inline-block; width: 33%; }
+
+		/* Standard syntax */
+		/*@keyframes example {
+    	from {background-color: red;}
+    	to {background-color: yellow;}
+		}
+
+		.message-feed {
+			animation-name: example;
+    	animation-duration: 4s;
+		}*/
+
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="column-left">
+		<img src="/bIoTope_logo.png" alt="some_text" style="height:100px; padding-left:40px; padding-top:20px">
+	</div>
+
+	<div class="column-center">
+		<h1> Heat Wave Mitigation </h1>
+		<h2> Lyon's Pilot Use Case no. 1 </h2>
+	</div>
+
+	<div class="column-right">
+		<img src="/Logo_GL_couleur_300.jpeg" alt="some_text" style="height:50px; float:right; padding:40px;">
+	</div>
+
+	</div>
+
+
+
+
+	<div class="container">
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<!-- <button id="play">Play</button>
+  <button id="stop">Stop</button> -->
+
+	<div id="leftSector" style="width:40%; float:left; margin-left:40px;">
+			<h3> <span style="color:#F30000;">Left Sector</span> Message Feed </h3>
+			<p id="leftSectorMessageFeed">Waiting for messages...<p>
+	</div>
+
+	<div id="rightSector" style="width:40%; float:right;">
+			<h3> <span style="color:#02AEF1;">Right Sector</span> Message Feed </h3>
+			<p id="rightSectorMessageFeed">Waiting for messages...<p>
+	</div>
+
+
+	<script src="/app.js"></script>
+</body>
+</html>

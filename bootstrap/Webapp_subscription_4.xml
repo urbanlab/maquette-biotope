@@ -1,0 +1,17 @@
+<omiEnvelope xmlns="http://www.opengroup.org/xsd/omi/1.0/" version="1.0" ttl="0">
+  <read msgformat="odf" callback="http://localhost:3000/valves/2" interval="-1">
+    <msg>
+      <Objects xmlns="http://www.opengroup.org/xsd/odf/1.0/">
+        <Object>
+          <id>Rue_Garibaldi_mock-up</id>
+          <Object>
+            <id>Right_Zone</id>
+            <Object>
+              <id>Valve_1</id>
+            </Object>
+          </Object>
+        </Object>
+      </Objects>
+    </msg>
+  </read>
+</omiEnvelope>
