@@ -118,7 +118,6 @@ app.post('/valves/1', function(req, res){
   res.status(200).end();
   // let msg = functionLib.XMLdataParser( req.body.msg );
   let msg = functionLib.XMLActuationDataParser( req.body.msg );
-  console.log(msg);
   io.volatile.emit('Left_Zone_Actuation', msg); // broadcast
   // io.volatile.emit('Left_Zone', msg); // broadcast
 });
@@ -127,7 +126,6 @@ app.post('/valves/2', function(req, res){
   res.status(200).end();
   // let msg = functionLib.XMLdataParser( req.body.msg );
   let msg = functionLib.XMLActuationDataParser( req.body.msg );
-  console.log(msg);
   io.volatile.emit('Right_Zone_Actuation', msg); // broadcast
   // io.volatile.emit('Left_Zone', msg); // broadcast
 });
