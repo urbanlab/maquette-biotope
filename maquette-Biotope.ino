@@ -73,9 +73,10 @@ CRGB leds[NUM_LEDS_ZONE2];
 CRGB wifi1[NUM_LEDS_WIFI];
 CRGB wifi2[NUM_LEDS_WIFI];
 
-#define BRIGHTNESS         255
-#define FRAMES_PER_SECOND  120
-#define LIGHTING_PERIOD    13
+#define BRIGHTNESS                  255
+#define FRAMES_PER_SECOND           120
+#define LIGHTING_PERIOD_ARROSAGE    15
+#define LIGHTING_PERIOD_DATA       15
 
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 int pos = 0;
@@ -246,7 +247,7 @@ void wifi(int num)
 void arrosage(int z) {
   CRGBPalette16 palette = OceanColors_p;
   int offset = 0;
-  int pos = beatsin16(LIGHTING_PERIOD, 0, NUM_LEDS_ARROSAGES);
+  int pos = beatsin16(LIGHTING_PERIOD_ARROSAGE, 0, NUM_LEDS_ARROSAGES);
   if ( z == ZONE2 ) {
     offset = 3;
   }
@@ -273,7 +274,7 @@ void ligne(int total_leds)
   // a colored dot sweeping back and forth, with fading trails
   fadeToBlackBy( leds, total_leds, 20);
   //beatsin16(LIGHTING_PERIOD, 0, total_leds)
-  if (posCount < LIGHTING_PERIOD ) {
+  if (posCount < LIGHTING_PERIOD_DATA ) {
     posCount++;
   } else {
     pos++;
@@ -290,5 +291,9 @@ void stopligne() {
   for ( int i = 0 ; i < NUM_LEDS_ZONE2 ; i ++) {
     leds[i] = CRGB::Black;
   }
+  // Reset de la positin dans le strip
+  pos = 0;
+  posCount = 0;
+
 }
 
