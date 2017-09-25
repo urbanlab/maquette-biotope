@@ -1,11 +1,11 @@
 /*--------------------------------------------------------------------
   Maquette Biotope - Pierre-Gilles Levallois - pgl@erasme.org
-----------------------------------------------------------------------
+  ----------------------------------------------------------------------
   Septembre 2017
-----------------------------------------------------------------------
+  ----------------------------------------------------------------------
 
-Fonctionnement : 
-~~~~~~~~~~~~~~~~
+  Fonctionnement :
+  ~~~~~~~~~~~~~~~~
     - 2 zones d'arrosage avec chacune un arbre connecte
     - Une ligne de transmission de donnees separees en 2  paries (zone 1 et zone 2)
 
@@ -15,23 +15,23 @@ Fonctionnement :
 
   --8<------8<------8<------8<------8<------8<------8<------8<------
 
-// Include the required Wire library for I2C
-#include <Wire.h>
+  // Include the required Wire library for I2C
+  #include <Wire.h>
   void setup() {
     // Start the I2C Bus as Master
-    Wire.begin(); 
+    Wire.begin();
   }
-  
+
   void loop() {
     Wire.beginTransmission(9); // transmit to device #9
-    Wire.write("...");              // sends something 
+    Wire.write("...");              // sends something
     Wire.endTransmission();    // stop transmitting
   }
 
   --8<------8<------8<------8<------8<------8<------8<------8<------
 
-Commandes disponibles : 
-~~~~~~~~~~~~~~~~~~~~~~~
+  Commandes disponibles :
+  ~~~~~~~~~~~~~~~~~~~~~~~
 
   - '1' : // Allumage ligne data vers zone 1
   - '2' : // Extinction ligne data zone 1
@@ -41,8 +41,8 @@ Commandes disponibles :
   - '6' : // Extinction Arrosage zone 1
   - '7' : // Arrosage zone 2
   - '8' : // Extinction Arrosage zone 2
- 
---------------------------------------------------------------------*/
+
+  --------------------------------------------------------------------*/
 #include "FastLED.h"
 #include <Wire.h>
 
@@ -69,7 +69,7 @@ CRGB zones[NUM_LEDS_ARROSAGES];
 #define NUM_LEDS_ZONE2    9 //10
 CRGB leds[NUM_LEDS_ZONE2];
 
-#define NUM_LEDS_WIFI   1
+#define NUM_LEDS_WIFI   2
 CRGB wifi1[NUM_LEDS_WIFI];
 CRGB wifi2[NUM_LEDS_WIFI];
 
@@ -114,7 +114,7 @@ void setup() {
 }
 
 void loop()
-{ 
+{
   if (Serial.available()) {
     commande = Serial.read();
     choice();
@@ -232,12 +232,14 @@ void wifi(int num)
   // a colored dot sweeping back and forth, with fading trails
   CRGBPalette16 palette = LavaColors_p;
   //int pos = beatsin16(LIGHTING_PERIOD, 0, NUM_LEDS_WIFI);
-  if ( num == 1) {
-    fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
-    wifi1[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
-  } else {
-    fadeToBlackBy( wifi2, NUM_LEDS_WIFI, 20);
-    wifi2[0] += ColorFromPalette(palette, gHue + 2, gHue + 10);
+  for (int i = 0; i < NUM_LEDS_WIFI; i++) {
+    if ( num == 1) {
+      fadeToBlackBy( wifi1, NUM_LEDS_WIFI, 20);
+      wifi1[i] += ColorFromPalette(palette, gHue + 2, gHue + 10);
+    } else {
+      fadeToBlackBy( wifi2, NUM_LEDS_WIFI, 20);
+      wifi2[i] += ColorFromPalette(palette, gHue + 2, gHue + 10);
+    }
   }
 }
 
