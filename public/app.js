@@ -34,16 +34,24 @@ let myOptions = {
             type: "time",
             display: true,
             scaleLabel: {display: true, labelString: 'time', fontColor: "#000000"},
-            ticks: {major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}}
+            ticks: {major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}},
+            time: {
+                max: moment().add(5, 'seconds')
+            }
           }],
     yAxes:
           [{
             display: true,
             scaleLabel: {display: true, labelString: 'value', fontColor: "#000000"},
-            ticks: {major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}}
+            ticks: {min: -1.5, max: 1.5, major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}}
           }]
   }
 };
+
+
+let leftData  = new Array();//{x: new Date(), y: 0.0}];
+let rightData = new Array();//{x: new Date(), y: 0.0}];
+
 
 let lowerThreshold = -0.5;
 let upperThreshold = 0.5;
@@ -51,17 +59,17 @@ let upperThreshold = 0.5;
 let myAnnotation = {
   events: ['click'],
   annotations: [
-    // {
-  //                 drawTime: "afterDatasetsDraw",
-  //                 id: "vline",
-  //                 type: "line",
-  //                 mode: "vertical",
-  //                 scaleID: "x-axis-0",
-  //                 value: leftData[window.index].x,
-  //                 borderColor: "black",
-  //                 borderWidth: 2,
-  //                 label: {backgroundColor: "red", fontColor: "#fff", content: "Now!", enabled: true, xPadding: 10, yPadding: 10}
-  //               },
+                {
+                  drawTime: "afterDatasetsDraw",
+                  id: "vline",
+                  type: "line",
+                  mode: "vertical",
+                  scaleID: "x-axis-0",
+                  value: new Date(),
+                  borderColor:  "black",
+                  borderWidth:  3,
+                  label: {backgroundColor: "black", fontColor: "#fff", fontSize: 20, content: "Now!", enabled: true, xPadding: 10, yPadding: 10}
+                },
                 {
                   drawTime: "afterDatasetsDraw",
                   id: "lowerHline",
@@ -94,8 +102,6 @@ myOptions.annotation = myAnnotation;
 let color = Chart.helpers.color;
 Chart.defaults.global.defaultFontColor = 'black';
 
-let leftData  = new Array();//{x: new Date(), y: 0.0}];
-let rightData = new Array();//{x: new Date(), y: 0.0}];
 let config = {
   data: {
           datasets:
@@ -167,8 +173,11 @@ let trim = function( dataArray ) {
 
 
 
-let leftSectorMessageFeed = new Array();
-let rightSectorMessageFeed = new Array();
+let leftSectorMessageFeed_hist = new Array();
+let leftSectorMessageFeed_last;
+let rightSectorMessageFeed_hist = new Array();
+let rightSectorMessageFeed_last;
+
 
 let formatMessage = function( msg, zone ) {
   let latestMessage = "[{timestamp}] Switch {msg} message received."
@@ -190,10 +199,20 @@ let formatMessage = function( msg, zone ) {
 //   msgFee
 // }
 
+let setNow = function( now ) {
+  window.myChart.annotation.elements.vline.options.value = now;
+  window.myChart.options.scales.xAxes[0].time.min = moment(now).subtract(60, "seconds");
+  window.myChart.options.scales.xAxes[0].time.max = moment(now).add(5, "seconds");
+}
+
 window.onload = function() {
 
   var ctx = document.getElementById("canvas").getContext("2d");
   window.myChart = new Chart(ctx, config);
+
+  // setInterval( function() {
+  //     window.myChart.annotation.elements.vline.options.value = new Date();
+  // }, 1000);
 
   window.socket.once('Left_Zone_Bootstrap', function(msg){
 
@@ -204,6 +223,7 @@ window.onload = function() {
       leftData.push(x);
     })
     trim(leftData);
+    setNow( leftData[leftData.length-1].x );
     window.myChart.update();
 
     // window.socket.removeListener('Left_Zone_Bootstrap');
@@ -218,6 +238,7 @@ window.onload = function() {
       rightData.push(x);
     })
     trim(rightData);
+    setNow( rightData[rightData.length-1].x );
     window.myChart.update();
 
     // window.socket.off('Left_Zone_Bootstrap');
@@ -226,12 +247,14 @@ window.onload = function() {
   window.socket.on('Left_Zone', function(msg){
     leftData.push(msg);
     trim(leftData);
+    setNow( leftData[leftData.length-1].x );
     window.myChart.update();
   });
 
   window.socket.on('Right_Zone', function(msg){
     rightData.push(msg);
     trim(rightData);
+    setNow( rightData[rightData.length-1].x );
     window.myChart.update();
   });
 
@@ -241,29 +264,68 @@ window.onload = function() {
     // console.log(msg);
     let latestMessage = formatMessage(msg, "left");
 
-    leftSectorMessageFeed.push(latestMessage);
-    if (leftSectorMessageFeed.length > 5) {
-      leftSectorMessageFeed.shift();
+    leftSectorMessageFeed_hist.push(leftSectorMessageFeed_last);
+    leftSectorMessageFeed_last = latestMessage;
+
+    if (leftSectorMessageFeed_hist.length > 4) {
+      leftSectorMessageFeed_hist.shift();
     }
 
-    document.getElementById("leftSectorMessageFeed").innerHTML = leftSectorMessageFeed.join('<br/>');
-      // window.myIntervals.push(setInterval( loop, 16));
+
+    document.getElementById("leftSectorMessageFeed_hist").innerHTML = leftSectorMessageFeed_hist.join('<br/>');
+
+    document.getElementById("leftSectorMessageFeed_last_div").remove();
+
+    var div = document.createElement('div');
+    div.setAttribute('class', 'typewriter');
+    div.setAttribute('id', 'leftSectorMessageFeed_last_div');
+
+    var p = document.createElement('p');
+    p.setAttribute('id', 'leftSectorMessageFeed_last_p');
+
+    div.appendChild(p);
+    document.getElementById("leftSectorMessageFeed_last_container").appendChild(div);
+    document.getElementById("leftSectorMessageFeed_last_p").innerHTML = leftSectorMessageFeed_last;
+
+    // leftSectorMessageFeed.push(latestMessage);
+    // if (leftSectorMessageFeed.length > 5) {
+    //   leftSectorMessageFeed.shift();
+    // }
+    //
+    // document.getElementById("leftSectorMessageFeed").innerHTML = leftSectorMessageFeed.join('<br/>');
+    //   // window.myIntervals.push(setInterval( loop, 16));
   });
 
   window.socket.on('Right_Zone_Actuation', function(msg){
 
     let latestMessage = formatMessage(msg, "right");
 
-    rightSectorMessageFeed.push(latestMessage);
-    if (rightSectorMessageFeed.length > 5) {
-      rightSectorMessageFeed.shift();
+
+    rightSectorMessageFeed_hist.push(rightSectorMessageFeed_last);
+    rightSectorMessageFeed_last = latestMessage;
+
+    if (rightSectorMessageFeed_hist.length > 4) {
+      rightSectorMessageFeed_hist.shift();
     }
 
-    document.getElementById("rightSectorMessageFeed").innerHTML = rightSectorMessageFeed.join('<br/>');
+
+    document.getElementById("rightSectorMessageFeed_hist").innerHTML = rightSectorMessageFeed_hist.join('<br/>');
+
+    document.getElementById("rightSectorMessageFeed_last_div").remove();
+
+    var div = document.createElement('div');
+    div.setAttribute('class', 'typewriter');
+    div.setAttribute('id', 'rightSectorMessageFeed_last_div');
+
+    var p = document.createElement('p');
+    p.setAttribute('id', 'rightSectorMessageFeed_last_p');
+
+    div.appendChild(p);
+    document.getElementById("rightSectorMessageFeed_last_container").appendChild(div);
+    document.getElementById("rightSectorMessageFeed_last_p").innerHTML = rightSectorMessageFeed_last;
   });
 
 
-    // window.addEventListener('resize', resize, false);
 };
 
 

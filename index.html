@@ -20,14 +20,14 @@
   <!-- <script src='utils.js'></script> -->
 	<style>
 
-		html, body {
+		/*html, body {
       width: 100%;
       height: 100%;
       margin: 0px;
       border: 0;
       overflow: hidden;
       display: block;
-    }
+    }*/
 
 		canvas {
         -moz-user-select: none;
@@ -44,37 +44,55 @@
 
 		h1 {
 			text-align: center;
-			font-family: "Arial";
+			font-family: "Monospace";
 		}
 
 		h2 {
 			text-align: center;
-			font-family: "Arial";
+			font-family: "Monospace";
 			font-style: italic;
 		}
 
 		h3 {
-			font-family: "Arial";
+			font-family: "Monospace";
 		}
 
 		p {
-    	font-family: "Arial";
+    	font-family: "Monospace";
 		}
 
 		.column-left{ float: left; width: 33%; }
 		.column-right{ float: right; width: 33%; }
 		.column-center{ display: inline-block; width: 33%; }
 
-		/* Standard syntax */
-		/*@keyframes example {
-    	from {background-color: red;}
-    	to {background-color: yellow;}
+		.typewriter p {
+		  overflow: hidden; /* Ensures the content is not revealed until the animation */
+		  border-right: .15em solid gray; /* The typwriter cursor */
+		  white-space: nowrap; /* Keeps the content on a single line */
+		  /*margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+			margin: 0;
+		  /*letter-spacing: .15em; /* Adjust as needed */
+			display: inline-block;
+		  animation:
+		    typing 2s steps(41, start),
+		    blink-caret .75s step-end infinite;
+				/*-moz-animation-iteration-count: infinite;
+				-webkit-animation-iteration-count: infinite;
+				-o-animation-iteration-count: infinite;*/
 		}
 
-		.message-feed {
-			animation-name: example;
-    	animation-duration: 4s;
-		}*/
+		/* The typing effect */
+		@keyframes typing {
+		  from { width: 0% }
+		  to { width: 41ch }
+		}
+
+		/* The typewriter cursor effect */
+		@keyframes blink-caret {
+		  from, to { border-color: transparent }
+		  50% { border-color: gray; }
+		}
+
 
 	</style>
 </head>
@@ -97,9 +115,6 @@
 
 	</div>
 
-
-
-
 	<div class="container">
 		<canvas id="canvas"></canvas>
 	</div>
@@ -109,13 +124,30 @@
 
 	<div id="leftSector" style="width:40%; float:left; margin-left:40px;">
 			<h3> <span style="color:#F30000;">Left Sector</span> Message Feed </h3>
-			<p id="leftSectorMessageFeed">Waiting for messages...<p>
+			<p id="leftSectorMessageFeed_hist"></p>
+			<div id="leftSectorMessageFeed_last_container">
+				<div class="typewriter" id="leftSectorMessageFeed_last_div">
+					<p id="leftSectorMessageFeed_last_p">Waiting for messages...</p>
+				</div>
+			</div>
 	</div>
 
 	<div id="rightSector" style="width:40%; float:right;">
 			<h3> <span style="color:#02AEF1;">Right Sector</span> Message Feed </h3>
-			<p id="rightSectorMessageFeed">Waiting for messages...<p>
+			<p id="rightSectorMessageFeed_hist"></p>
+			<div id="rightSectorMessageFeed_last_container">
+				<div class="typewriter" id="rightSectorMessageFeed_last_div">
+					<p id="rightSectorMessageFeed_last_p">Waiting for messages...</p>
+				</div>
+			</div>
 	</div>
+
+
+
+	<!-- <div class="typewriter">
+	  <h1>The cat and the hat.</h1>
+	</div> -->
+
 
 
 	<script src="/app.js"></script>
