@@ -34,21 +34,22 @@ let myOptions = {
             type: "time",
             display: true,
             scaleLabel: {display: true, labelString: 'time', fontColor: "#000000"},
-            ticks: {major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}},
+            ticks: {source: 'auto', major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}},
             time: {
-                max: moment().add(5, 'seconds')
+                unit: 'second',
+                unitStepSize: 10
             }
           }],
     yAxes:
           [{
             display: true,
-            scaleLabel: {display: true, labelString: 'value', fontColor: "#000000"},
+            scaleLabel: {display: true, labelString: 'irrigation triggering index', fontColor: "#000000"},
             ticks: {min: -1.5, max: 1.5, major: {fontStyle: "bold", fontColor: "#000000"}, minor: {fontColor: "#000000"}}
           }]
   }
 };
 
-
+// moment(Math.floor(moment().unix()/10)*10)
 let leftData  = new Array();//{x: new Date(), y: 0.0}];
 let rightData = new Array();//{x: new Date(), y: 0.0}];
 
@@ -65,10 +66,10 @@ let myAnnotation = {
                   type: "line",
                   mode: "vertical",
                   scaleID: "x-axis-0",
-                  value: new Date(),
+                  value: new moment(),
                   borderColor:  "black",
                   borderWidth:  3,
-                  label: {backgroundColor: "black", fontColor: "#fff", fontSize: 20, content: "Now!", enabled: true, xPadding: 10, yPadding: 10}
+                  label: {backgroundColor: "black", fontColor: "#fff", fontFamily: "Monospace", fontSize: 20, content: "Now!", enabled: true, xPadding: 10, yPadding: 10}
                 },
                 {
                   drawTime: "afterDatasetsDraw",
@@ -79,7 +80,7 @@ let myAnnotation = {
                   value: lowerThreshold,
                   borderColor: "black",
                   borderWidth: 3,
-                  label: {backgroundColor: "black", fontColor: "#fff", content: "Switch OFF Threshold", enabled: true, xPadding: 10, yPadding: 10}
+                  label: {backgroundColor: "black", fontColor: "#fff", fontFamily: "Monospace", content: "Switch OFF Threshold", enabled: true, xPadding: 10, yPadding: 10}
                 },
                 {
                   drawTime: "afterDatasetsDraw",
@@ -90,7 +91,7 @@ let myAnnotation = {
                   value: upperThreshold,
                   borderColor: "black",
                   borderWidth: 3,
-                  label: {backgroundColor: "black", fontColor: "#fff", content: "Switch ON Threshold", enabled: true, xPadding: 10, yPadding: 10}
+                  label: {backgroundColor: "black", fontColor: "#fff", fontFamily: "Monospace", content: "Switch ON Threshold", enabled: true, xPadding: 10, yPadding: 10}
                 }
                ]
 };
@@ -101,6 +102,7 @@ myOptions.annotation = myAnnotation;
 
 let color = Chart.helpers.color;
 Chart.defaults.global.defaultFontColor = 'black';
+Chart.defaults.global.defaultFontFamily = 'Monospace';
 
 let config = {
   data: {
@@ -156,7 +158,7 @@ let trim = function( dataArray ) {
   // })
 
   // console.log(sortedArray);
-  let duration = moment.duration(60, 'seconds');
+  let duration = moment.duration(65, 'seconds');
 
   let t0 = moment( dataArray[0].x );
   let t1 = moment();// dataArray[dataArray.length-1].x );
