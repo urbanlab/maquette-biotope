@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 let getBootstrapData = function( callback ) {
 
   let options = {
-    hostname: 'localhost',
+    hostname: 'o-mi-node',
     port: 8080,
     path: '/',
     method: 'POST',

@@ -1,0 +1,8 @@
+FROM debian:stretch-slim
+#FROM arm32v7/debian:stretch-slim
+
+RUN apt update && apt upgrade -y && apt install -y curl
+
+WORKDIR /opt/o-mi-node-bootstrap
+COPY o-mi-node-bootstrap/*.xml ./
+COPY o-mi-node-bootstrap/*.sh  ./

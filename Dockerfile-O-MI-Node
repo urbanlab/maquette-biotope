@@ -1,0 +1,29 @@
+FROM debian:stretch-slim
+#FROM arm32v7/debian:stretch-slim
+
+# cf. https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1542497.html
+RUN mkdir -p /usr/share/man/man1
+
+RUN apt update && apt upgrade -y && apt install -y \
+  wget \
+  openjdk-8-jre-headless
+
+WORKDIR /opt
+
+ENV version 0.9.1
+
+RUN wget https://github.com/AaltoAsia/O-MI/releases/download/${version}/o-mi-node-${version}.tgz
+RUN tar xfz o-mi-node-${version}.tgz && rm o-mi-node-${version}.tgz
+
+COPY o-mi-node-configuration/application.conf /opt/o-mi-node-${version}/configs/
+
+VOLUME /data
+
+# HTTP endpoint
+EXPOSE 8080
+# admin console:
+EXPOSE 8180
+
+WORKDIR /opt/o-mi-node-${version}
+
+CMD bin/o-mi-node

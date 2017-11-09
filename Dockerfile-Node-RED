@@ -1,0 +1,7 @@
+FROM nodered/node-red-docker:latest
+#FROM nodered/node-red-docker:rpi
+
+RUN npm install node-red-node-serialport
+
+COPY ./node-red-flows/flows.json /data/
+COPY ./node-red-configuration/settings.js /data/

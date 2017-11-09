@@ -1,0 +1,14 @@
+# FROM arm32v7/node:6.11.5-slim
+FROM node:latest
+
+WORKDIR /app
+
+ADD ./public ./public/
+ADD function-lib.js ./
+ADD index.html ./
+ADD package.json ./
+ADD main.js ./
+
+RUN npm install
+
+CMD node main.js
