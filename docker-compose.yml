@@ -6,20 +6,23 @@ services:
       context: .
       dockerfile: Dockerfile-Node-RED
     ports:
-      - "1880:1880"
+      - 1881:1880
     networks:
       - heat-wave-mitigation-demo-network
     volumes:
       - node-red-data:/data
     depends_on:
       - o-mi-node
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    user: root
 
   o-mi-node:
     build:
       context: .
       dockerfile: Dockerfile-O-MI-Node
     ports:
-      - "8080:8080"
+      - 8080:8080
     networks:
       - heat-wave-mitigation-demo-network
     volumes:
@@ -40,7 +43,7 @@ services:
       context: .
       dockerfile: Dockerfile-Web-App
     ports:
-      - "3000:3000"
+      - 3000:3000
     networks:
       - heat-wave-mitigation-demo-network
     depends_on:
