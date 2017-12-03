@@ -4,5 +4,5 @@ FROM debian:stretch-slim
 RUN apt update && apt upgrade -y && apt install -y curl
 
 WORKDIR /opt/o-mi-node-bootstrap
-COPY o-mi-node-bootstrap/*.xml ./
-COPY o-mi-node-bootstrap/*.sh  ./
+COPY ./components/o-mi-node/o-mi-node-bootstrap/*.xml ./
+COPY ./components/o-mi-node/o-mi-node-bootstrap/*.sh  ./

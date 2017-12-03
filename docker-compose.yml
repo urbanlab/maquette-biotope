@@ -23,6 +23,7 @@ services:
       dockerfile: Dockerfile-O-MI-Node
     ports:
       - 8080:8080
+      - 8180:8180
     networks:
       - heat-wave-mitigation-demo-network
     volumes:
@@ -50,7 +51,7 @@ services:
       - o-mi-node
       - node-red
       - o-mi-node-bootstrapper
-      
+
 networks:
   heat-wave-mitigation-demo-network:
 

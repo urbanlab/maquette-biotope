@@ -15,7 +15,7 @@ ENV version 0.9.1
 RUN wget https://github.com/AaltoAsia/O-MI/releases/download/${version}/o-mi-node-${version}.tgz
 RUN tar xfz o-mi-node-${version}.tgz && rm o-mi-node-${version}.tgz
 
-COPY o-mi-node-configuration/application.conf /opt/o-mi-node-${version}/configs/
+COPY ./components/o-mi-node/o-mi-node-configuration/application.conf /opt/o-mi-node-${version}/configs/
 
 VOLUME /data
 
@@ -26,4 +26,9 @@ EXPOSE 8180
 
 WORKDIR /opt/o-mi-node-${version}
 
-CMD bin/o-mi-node
+RUN echo "rm -rf /data/*" > purge-data-and-run.sh
+RUN echo "bin/o-mi-node" >> purge-data-and-run.sh
+RUN chmod +x purge-data-and-run.sh
+
+#CMD bin/o-mi-node
+CMD ./purge-data-and-run.sh

@@ -1,0 +1,23 @@
+{
+  "name": "biotope-hwm-demo-for-athens",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "chart.js": "^2.6.0",
+    "chartjs-plugin-annotation": "^0.5.5",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.15.4",
+    "moment": "^2.18.1",
+    "socket.io": "^2.0.3"
+  }
+}
