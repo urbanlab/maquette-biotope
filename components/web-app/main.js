@@ -35,13 +35,13 @@ let getBootstrapData = function( callback ) {
                                   <Object>
                                     <id>Left_Zone</id>
                                     <Object>
-                                      <id>Tree_1</id>
+                                      <id>Indicator_1</id>
                                     </Object>
                                   </Object>
                                   <Object>
                                     <id>Right_Zone</id>
                                     <Object>
-                                      <id>Tree_1</id>
+                                      <id>Indicator_1</id>
                                     </Object>
                                   </Object>
                                 </Object>
@@ -100,14 +100,14 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/trees/1', function(req, res){
+app.post('/indicators/1', function(req, res){
   res.status(200).end();
   let msg = functionLib.XMLdataParser( req.body.msg );
   // console.log(msg);
   io.volatile.emit('Left_Zone', msg); // broadcast
 });
 
-app.post('/trees/2', function(req, res){
+app.post('/indicators/2', function(req, res){
   res.status(200).end();
   let msg = functionLib.XMLdataParser( req.body.msg );
   // console.log(msg);

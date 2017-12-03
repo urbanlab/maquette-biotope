@@ -23,7 +23,6 @@ services:
       dockerfile: Dockerfile-O-MI-Node
     ports:
       - 8080:8080
-      - 8180:8180
     networks:
       - heat-wave-mitigation-demo-network
     volumes:
@@ -33,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-O-MI-Node-bootstrapper
-    command: bash -c "sleep 10 ; sh init.sh ; sh subscribe.sh"
+    command: bash -c "sleep 10 ; sh subscribe.sh"
     networks:
       - heat-wave-mitigation-demo-network
     depends_on:
