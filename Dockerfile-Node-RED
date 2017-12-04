@@ -1,5 +1,5 @@
-FROM nodered/node-red-docker:latest
-#FROM nodered/node-red-docker:rpi
+#FROM nodered/node-red-docker:latest
+FROM nodered/node-red-docker:rpi
 
 RUN npm install node-red-node-serialport
 
