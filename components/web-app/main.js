@@ -84,10 +84,10 @@ let getBootstrapData = function( callback ) {
 io.on('connection', function(socket){
   console.log('[socket.io] An user connected.');
 
-  getBootstrapData( function(bootstrapData) {
-    io.emit('Left_Zone_Bootstrap',  bootstrapData.l);
-    io.emit('Right_Zone_Bootstrap', bootstrapData.r);
-  });
+  //getBootstrapData( function(bootstrapData) {
+  //  io.emit('Left_Zone_Bootstrap',  bootstrapData.l);
+  //  io.emit('Right_Zone_Bootstrap', bootstrapData.r);
+  //});
 
   socket.on('disconnect', function(){
     console.log('[socket.io] An user disconnected.');
