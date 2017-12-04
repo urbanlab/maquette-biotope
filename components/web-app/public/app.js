@@ -256,8 +256,8 @@ window.onload = function() {
   window.socket.on('Right_Zone', function(msg){
     rightData.push(msg);
     trim(rightData);
-    setNow( rightData[rightData.length-1].x );
-    window.myChart.update();
+    // setNow( rightData[rightData.length-1].x );
+    // window.myChart.update();
   });
 
   window.socket.on('Left_Zone_Actuation', function(msg){
