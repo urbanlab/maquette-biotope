@@ -25,7 +25,7 @@ valve_1.add_infoitem( InfoItem('Status').add_value('OFF', type='xsd:string') )
 leftZone.add_object(valve_1)
 
 indicator_1 = Object('myTestType')
-indicator_1.add_id("Indicator_1")
+indicator_1.add_id("Index_1")
 indicator_1.add_infoitem( InfoItem('Value').add_value('0.0', type='xsd:decimal') )
 leftZone.add_object(indicator_1)
 
@@ -47,7 +47,7 @@ valve_1.add_infoitem( InfoItem('Status').add_value('OFF', type='xsd:string') )
 rightZone.add_object(valve_1)
 
 indicator_1 = Object('myTestType')
-indicator_1.add_id("Indicator_1")
+indicator_1.add_id("Index_1")
 indicator_1.add_infoitem( InfoItem('Value').add_value('0.0', type='xsd:decimal') )
 rightZone.add_object(indicator_1)
 

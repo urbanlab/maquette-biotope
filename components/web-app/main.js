@@ -35,13 +35,13 @@ let getBootstrapData = function( callback ) {
                                   <Object>
                                     <id>Left_Zone</id>
                                     <Object>
-                                      <id>Indicator_1</id>
+                                      <id>Index_1</id>
                                     </Object>
                                   </Object>
                                   <Object>
                                     <id>Right_Zone</id>
                                     <Object>
-                                      <id>Indicator_1</id>
+                                      <id>Index_1</id>
                                     </Object>
                                   </Object>
                                 </Object>

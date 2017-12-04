@@ -1,5 +1,5 @@
-FROM arm32v7/node:6.11.5-slim
-#FROM node:latest
+#FROM arm32v7/node:6.11.5-slim
+FROM node:latest
 
 WORKDIR /app
 

@@ -69,7 +69,7 @@ let myAnnotation = {
                   value: new moment(),
                   borderColor:  "black",
                   borderWidth:  3,
-                  label: {backgroundColor: "black", fontColor: "#fff", fontFamily: "Monospace", fontSize: 20, content: "Now!", enabled: true, xPadding: 10, yPadding: 10}
+                  label: {backgroundColor: "black", fontColor: "#fff", fontFamily: "Monospace", fontSize: 20, content: "Now", enabled: true, xPadding: 10, yPadding: 10, yAdjust: -167}
                 },
                 {
                   drawTime: "afterDatasetsDraw",
@@ -226,7 +226,7 @@ window.onload = function() {
     })
     trim(leftData);
     setNow( leftData[leftData.length-1].x );
-    window.myChart.update();
+    window.myChart.update({duration: 0});
 
     // window.socket.removeListener('Left_Zone_Bootstrap');
   });
@@ -241,7 +241,7 @@ window.onload = function() {
     })
     trim(rightData);
     setNow( rightData[rightData.length-1].x );
-    window.myChart.update();
+    window.myChart.update({duration: 0});
 
     // window.socket.off('Left_Zone_Bootstrap');
   });
@@ -250,14 +250,14 @@ window.onload = function() {
     leftData.push(msg);
     trim(leftData);
     setNow( leftData[leftData.length-1].x );
-    window.myChart.update();
+    window.myChart.update({duration: 0});
   });
 
   window.socket.on('Right_Zone', function(msg){
     rightData.push(msg);
     trim(rightData);
-    // setNow( rightData[rightData.length-1].x );
-    // window.myChart.update();
+    setNow( rightData[rightData.length-1].x );
+    window.myChart.update({duration: 0});
   });
 
   window.socket.on('Left_Zone_Actuation', function(msg){
