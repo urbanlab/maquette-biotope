@@ -4,9 +4,9 @@ var moment  = require('moment');
 exports.XMLdataParser = function( xmlData ) {
 
   let $     = cheerio.load( xmlData );
-  let ts    = $('InfoItem[name=Temperature] value').attr('datetime');
+  let ts    = $('InfoItem[name=Value] value').attr('datetime');
   // let ts2    = $('InfoItem[name=Temperature] value').attr('unixtime');
-  let value = $('InfoItem[name=Temperature] value').text();
+  let value = $('InfoItem[name=Value] value').text();
 
   //   let toto = $('id').filter(function(i, el) {
   //   // this === el
@@ -21,9 +21,9 @@ exports.XMLdataParser = function( xmlData ) {
 exports.XMLboostrapDataParser = function( xmlData, zone ) {
 
   let $     = cheerio.load( xmlData );
-  let ts    = $('InfoItem[name=Temperature] value').attr('datetime');
+  let ts    = $('InfoItem[name=Value] value').attr('datetime');
   // let ts2    = $('InfoItem[name=Temperature] value').attr('unixtime');
-  let value = $('InfoItem[name=Temperature] value').text();
+  let value = $('InfoItem[name=Value] value').text();
 
   let selectedZoneData = $('id').filter(function(i, el) {
     // this === el

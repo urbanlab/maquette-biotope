@@ -3,11 +3,11 @@ FROM arm32v7/node:6.11.5-slim
 
 WORKDIR /app
 
-ADD ./public ./public/
-ADD function-lib.js ./
-ADD index.html ./
-ADD package.json ./
-ADD main.js ./
+ADD ./components/web-app/public ./public/
+ADD ./components/web-app/function-lib.js ./
+ADD ./components/web-app/index.html ./
+ADD ./components/web-app/package.json ./
+ADD ./components/web-app/main.js ./
 
 RUN npm install
 

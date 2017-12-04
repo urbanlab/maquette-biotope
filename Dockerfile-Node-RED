@@ -3,5 +3,5 @@ FROM nodered/node-red-docker:rpi
 
 RUN npm install node-red-node-serialport
 
-COPY ./node-red-flows/flows.json /data/
-COPY ./node-red-configuration/settings.js /data/
+COPY ./components/node-red/node-red-flows/flows.json /data/
+COPY ./components/node-red/node-red-configuration/settings.js /data/
