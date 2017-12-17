@@ -1,5 +1,7 @@
-#FROM arm32v7/node:6.11.5-slim
+# x64 architecture:
 FROM node:latest
+# arm32 architecture:
+#FROM arm32v7/node:6.11.5-slim
 
 WORKDIR /app
 

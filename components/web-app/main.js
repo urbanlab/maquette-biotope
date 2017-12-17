@@ -61,10 +61,6 @@ let getBootstrapData = function( callback ) {
       // console.log('Body: ' + body);
       leftZoneData  = functionLib.XMLboostrapDataParser(body, 'Left_Zone');
       rightZoneData = functionLib.XMLboostrapDataParser(body, 'Right_Zone');
-      // console.log(leftZoneData);
-      // console.log(rightZoneData);
-      // console.log(leftZoneData.length);
-      // console.log(rightZoneData.length);
       callback({'l': leftZoneData, 'r': rightZoneData});
     });
   });
@@ -72,7 +68,6 @@ let getBootstrapData = function( callback ) {
   req.on('error', function(e) {
     console.log('[Express] Problem with request: ' + e.message);
   });
-  // write data to request body
 
   req.write( ODF_request_body );
   req.end();
@@ -83,12 +78,6 @@ let getBootstrapData = function( callback ) {
 // --- socket.io logging
 io.on('connection', function(socket){
   console.log('[socket.io] An user connected.');
-
-  //getBootstrapData( function(bootstrapData) {
-  //  io.emit('Left_Zone_Bootstrap',  bootstrapData.l);
-  //  io.emit('Right_Zone_Bootstrap', bootstrapData.r);
-  //});
-
   socket.on('disconnect', function(){
     console.log('[socket.io] An user disconnected.');
   });
@@ -103,31 +92,25 @@ app.get('/', function(req, res) {
 app.post('/indicators/1', function(req, res){
   res.status(200).end();
   let msg = functionLib.XMLdataParser( req.body.msg );
-  // console.log(msg);
   io.volatile.emit('Left_Zone', msg); // broadcast
 });
 
 app.post('/indicators/2', function(req, res){
   res.status(200).end();
   let msg = functionLib.XMLdataParser( req.body.msg );
-  // console.log(msg);
   io.volatile.emit('Right_Zone', msg); // broadcast
 });
 
 app.post('/valves/1', function(req, res){
   res.status(200).end();
-  // let msg = functionLib.XMLdataParser( req.body.msg );
   let msg = functionLib.XMLActuationDataParser( req.body.msg );
   io.volatile.emit('Left_Zone_Actuation', msg); // broadcast
-  // io.volatile.emit('Left_Zone', msg); // broadcast
 });
 
 app.post('/valves/2', function(req, res){
   res.status(200).end();
-  // let msg = functionLib.XMLdataParser( req.body.msg );
   let msg = functionLib.XMLActuationDataParser( req.body.msg );
   io.volatile.emit('Right_Zone_Actuation', msg); // broadcast
-  // io.volatile.emit('Left_Zone', msg); // broadcast
 });
 
 server.listen(3000, function(){

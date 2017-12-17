@@ -1,11 +1,5 @@
 'use strict';
 
-// let leftData = Array.from(tAxis, function(t) {
-//   let t0 = moment(startTime); // commodity
-//   return {"x": t, "y": leftDataGeneratingFunction( t.unix() )};
-// });
-
-
 window.socket = io();
 
 window.index = 0; // initialization
@@ -49,13 +43,11 @@ let myOptions = {
   }
 };
 
-// moment(Math.floor(moment().unix()/10)*10)
 let leftData  = new Array();//{x: new Date(), y: 0.0}];
 let rightData = new Array();//{x: new Date(), y: 0.0}];
 
-
 let lowerThreshold = -0.5;
-let upperThreshold = 0.5;
+let upperThreshold =  0.5;
 
 let myAnnotation = {
   events: ['click'],
@@ -108,19 +100,6 @@ let config = {
   data: {
           datasets:
           [
-            // {
-            //   type: 'scatter',
-            //   label: "myOtherLabel",
-            //   backgroundColor: color(window.chartColors.blue).alpha(1.0).rgbString(),
-            //   borderColor: 'black',
-            //   // window.chartColors.blue,
-            //   pointStyle: 'circle',
-            //   pointRadius: 10,
-            //   pointHoverRadius: 15,
-            //   pointBackgroundColor: 'black',
-            //   fill: true,
-            //   data: Array(leftData[ window.index ])
-            // },
             {
               type: 'line',
               label: "Left Sector",
@@ -146,18 +125,8 @@ let config = {
   options: myOptions
 };
 
-
-
-
 let trim = function( dataArray ) {
 
-  // dataArray.sort( function(a, b) {
-  //   let t0 = moment(a.x);
-  //   let t1 = moment(b.x);
-  //   return t0.diff(t1, 'seconds');
-  // })
-
-  // console.log(sortedArray);
   let duration = moment.duration(65, 'seconds');
 
   let t0 = moment( dataArray[0].x );
@@ -171,15 +140,13 @@ let trim = function( dataArray ) {
   };
 
   return;
+
 };
-
-
 
 let leftSectorMessageFeed_hist = new Array();
 let leftSectorMessageFeed_last;
 let rightSectorMessageFeed_hist = new Array();
 let rightSectorMessageFeed_last;
-
 
 let formatMessage = function( msg, zone ) {
   let latestMessage = "[{timestamp}] Switch {msg} message received."
@@ -197,9 +164,6 @@ let formatMessage = function( msg, zone ) {
   latestMessage = latestMessage.replace(/{lr}/g, zone);
   return latestMessage;
 }
-// let msgFeedArrayToString = function( msgFeed ) {
-//   msgFee
-// }
 
 let setNow = function( now ) {
   window.myChart.annotation.elements.vline.options.value = now;
@@ -211,10 +175,6 @@ window.onload = function() {
 
   var ctx = document.getElementById("canvas").getContext("2d");
   window.myChart = new Chart(ctx, config);
-
-  // setInterval( function() {
-  //     window.myChart.annotation.elements.vline.options.value = new Date();
-  // }, 1000);
 
   window.socket.once('Left_Zone_Bootstrap', function(msg){
 
@@ -228,7 +188,6 @@ window.onload = function() {
     setNow( leftData[leftData.length-1].x );
     window.myChart.update({duration: 0});
 
-    // window.socket.removeListener('Left_Zone_Bootstrap');
   });
 
   window.socket.once('Right_Zone_Bootstrap', function(msg){
@@ -243,27 +202,28 @@ window.onload = function() {
     setNow( rightData[rightData.length-1].x );
     window.myChart.update({duration: 0});
 
-    // window.socket.off('Left_Zone_Bootstrap');
   });
 
   window.socket.on('Left_Zone', function(msg){
+
     leftData.push(msg);
     trim(leftData);
     setNow( leftData[leftData.length-1].x );
     window.myChart.update({duration: 0});
+
   });
 
   window.socket.on('Right_Zone', function(msg){
+
     rightData.push(msg);
     trim(rightData);
     setNow( rightData[rightData.length-1].x );
     window.myChart.update({duration: 0});
+
   });
 
   window.socket.on('Left_Zone_Actuation', function(msg){
-    // rightData.push(msg);
-    // trim(rightData);
-    // console.log(msg);
+
     let latestMessage = formatMessage(msg, "left");
 
     leftSectorMessageFeed_hist.push(leftSectorMessageFeed_last);
@@ -273,9 +233,7 @@ window.onload = function() {
       leftSectorMessageFeed_hist.shift();
     }
 
-
     document.getElementById("leftSectorMessageFeed_hist").innerHTML = leftSectorMessageFeed_hist.join('<br/>');
-
     document.getElementById("leftSectorMessageFeed_last_div").remove();
 
     var div = document.createElement('div');
@@ -289,19 +247,11 @@ window.onload = function() {
     document.getElementById("leftSectorMessageFeed_last_container").appendChild(div);
     document.getElementById("leftSectorMessageFeed_last_p").innerHTML = leftSectorMessageFeed_last;
 
-    // leftSectorMessageFeed.push(latestMessage);
-    // if (leftSectorMessageFeed.length > 5) {
-    //   leftSectorMessageFeed.shift();
-    // }
-    //
-    // document.getElementById("leftSectorMessageFeed").innerHTML = leftSectorMessageFeed.join('<br/>');
-    //   // window.myIntervals.push(setInterval( loop, 16));
   });
 
   window.socket.on('Right_Zone_Actuation', function(msg){
 
     let latestMessage = formatMessage(msg, "right");
-
 
     rightSectorMessageFeed_hist.push(rightSectorMessageFeed_last);
     rightSectorMessageFeed_last = latestMessage;
@@ -310,9 +260,7 @@ window.onload = function() {
       rightSectorMessageFeed_hist.shift();
     }
 
-
     document.getElementById("rightSectorMessageFeed_hist").innerHTML = rightSectorMessageFeed_hist.join('<br/>');
-
     document.getElementById("rightSectorMessageFeed_last_div").remove();
 
     var div = document.createElement('div');
@@ -325,31 +273,7 @@ window.onload = function() {
     div.appendChild(p);
     document.getElementById("rightSectorMessageFeed_last_container").appendChild(div);
     document.getElementById("rightSectorMessageFeed_last_p").innerHTML = rightSectorMessageFeed_last;
+
   });
 
-
 };
-
-
-
-// function resize() {
-//
-//     var canvas = document.getElementById('canvas');
-//     var canvasRatio = canvas.height / canvas.width;
-//     var windowRatio = window.innerHeight / window.innerWidth;
-//     var width;
-//     var height;
-//
-//
-//     if (windowRatio < canvasRatio) {
-//         height = window.innerHeight;
-//         width = height / canvasRatio;
-//     } else {
-//         width = window.innerWidth;
-//         height = width * canvasRatio;
-//     }
-//
-//     canvas.style.width = width + 'px';
-//     canvas.style.height = "20" + 'px';
-//     // console.log('here');
-// };

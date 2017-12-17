@@ -1,21 +1,9 @@
-#FROM debian:stretch-slim
-#FROM arm32v7/debian:jessie-slim
-#FROM arm32v7/openjdk:8-jre-slim
+# x64 architecture:
 FROM openjdk:8-jre-slim
-
-#RUN echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
-
-# cf. https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1542497.html
-#RUN mkdir -p /usr/share/man/man1/
-
-#ENV DEBIAN_FRONTEND noninteractive
+# arm32 architecture:
+#FROM arm32v7/openjdk:8-jre-slim
 
 RUN apt update && apt upgrade -y && apt install -y wget
-
-#RUN apt install -t jessie-backports  openjdk-8-jre-headless
-
-#RUN mkdir -p /usr/share/man/man1/
-#RUN apt install -y
 
 WORKDIR /opt
 
@@ -39,5 +27,4 @@ RUN echo "rm -rf /data/*" > purge-data-and-run.sh
 RUN echo "bin/o-mi-node" >> purge-data-and-run.sh
 RUN chmod +x purge-data-and-run.sh
 
-#CMD bin/o-mi-node
 CMD ./purge-data-and-run.sh
