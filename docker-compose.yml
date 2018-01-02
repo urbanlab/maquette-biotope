@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+
+  node-red:
+    build:
+      context: .
+      dockerfile: Dockerfile-Node-RED
+    ports:
+      - 1881:1880
+    networks:
+      - heat-wave-mitigation-demo-network
+    volumes:
+      - node-red-data:/data
+    depends_on:
+      - o-mi-node
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    user: root
+
+  o-mi-node:
+    build:
+      context: .
+      dockerfile: Dockerfile-O-MI-Node
+    ports:
+      - 8080:8080
+    networks:
+      - heat-wave-mitigation-demo-network
+    volumes:
+      - o-mi-node-data:/data
+
+  o-mi-node-bootstrapper:
+    build:
+      context: .
+      dockerfile: Dockerfile-O-MI-Node-bootstrapper
+    command: bash -c "sleep 30 ; sh subscribe.sh"
+    networks:
+      - heat-wave-mitigation-demo-network
+    depends_on:
+      - o-mi-node
+
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-Web-App
+    ports:
+      - 3000:3000
+    networks:
+      - heat-wave-mitigation-demo-network
+    depends_on:
+      - o-mi-node
+      - node-red
+      - o-mi-node-bootstrapper
+
+networks:
+  heat-wave-mitigation-demo-network:
+
+volumes:
+  node-red-data:
+  o-mi-node-data:

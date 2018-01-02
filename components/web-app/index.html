@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+	<head>
+		<title>bIoTope Heat Wave Mitigation Demo</title>
+	  <script src="moment/min/moment.min.js"></script>
+
+		<script src="chart.js/dist/Chart.min.js"></script>
+		<script src="chartjs-plugin-annotation/chartjs-plugin-annotation.min.js"></script>
+		<script src="socket.io/socket.io.js"></script>
+
+		<style>
+
+			html, body {
+	      width: 100%;
+	      height: 100%;
+	      margin: 0px;
+	      border: 0;
+	      display: block;
+	    }
+
+			canvas {
+	        -moz-user-select: none;
+	        -webkit-user-select: none;
+	        -ms-user-select: none;
+					display:block;
+					/*border:2px solid;*/
+					width:100vw;
+					/*height:20vh;*/
+					/*background-color: #666;*/
+					/*max-width: 80vw;*/
+					max-height: 58vh;
+	    }
+
+			h1 {
+				text-align: center;
+				font-family: "Monospace";
+			}
+
+			h2 {
+				text-align: center;
+				font-family: "Monospace";
+				font-style: italic;
+			}
+
+			h3 {
+				font-family: "Monospace";
+			}
+
+			p {
+	    	font-family: "Monospace";
+			}
+
+			.column-left{ float: left; width: 33%; }
+			.column-right{ float: right; width: 33%; }
+			.column-center{ display: inline-block; width: 33%; }
+
+			.typewriter p {
+			  overflow: hidden;
+			  border-right: .15em solid gray;
+			  white-space: nowrap;
+				margin: 0 auto;
+				display: inline-block;
+			  animation:
+			    typing 2s steps(41, start),
+			    blink-caret .75s step-end infinite;
+			}
+
+			@keyframes typing {
+			  from { width: 0% }
+			  to { width: 41ch }
+			}
+
+			@keyframes blink-caret {
+			  from, to { border-color: transparent }
+			  50% { border-color: gray; }
+			}
+
+
+		</style>
+
+	</head>
+
+
+	<body>
+
+		<div class="container">
+
+			<div class="column-left">
+				<img src="bIoTope_logo.png" alt="some_text" style="height:100px; padding-left:40px; padding-top:20px">
+			</div>
+
+			<div class="column-center">
+				<h1> Heat Wave Mitigation </h1>
+				<h2> Lyon's Pilot Use Case no. 1 </h2>
+			</div>
+
+			<div class="column-right">
+				<img src="Logo_GL_couleur_300.jpeg" alt="some_text" style="height:50px; float:right; padding:40px;">
+			</div>
+
+		</div>
+
+		<div class="container">
+			<canvas id="canvas"></canvas>
+		</div>
+
+		<div id="leftSector" style="width:40%; float:left; margin-left:40px;">
+				<h3> <span style="color:#F30000;">Left Sector</span> Message Feed from the O-MI node</h3>
+				<p id="leftSectorMessageFeed_hist"></p>
+				<div id="leftSectorMessageFeed_last_container">
+					<div class="typewriter" id="leftSectorMessageFeed_last_div">
+						<p id="leftSectorMessageFeed_last_p">Waiting for messages...</p>
+					</div>
+				</div>
+		</div>
+
+		<div id="rightSector" style="width:40%; float:right;">
+				<h3> <span style="color:#02AEF1;">Right Sector</span> Message Feed from the O-MI node</h3>
+				<p id="rightSectorMessageFeed_hist"></p>
+				<div id="rightSectorMessageFeed_last_container">
+					<div class="typewriter" id="rightSectorMessageFeed_last_div">
+						<p id="rightSectorMessageFeed_last_p">Waiting for messages...</p>
+					</div>
+				</div>
+		</div>
+
+		<script src="app.js"></script>
+
+	</body>
+</html>

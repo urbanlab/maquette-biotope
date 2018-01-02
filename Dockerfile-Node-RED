@@ -1,0 +1,9 @@
+# amd64 architecture:
+FROM nodered/node-red-docker:latest
+# armhf architecture:
+#FROM nodered/node-red-docker:rpi
+
+RUN npm install node-red-node-serialport
+
+COPY ./components/node-red/node-red-flows/flows.json /data/
+COPY ./components/node-red/node-red-configuration/settings.js /data/
