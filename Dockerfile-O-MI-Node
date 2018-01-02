@@ -1,6 +1,6 @@
-# x64 architecture:
+# amd64 architecture:
 FROM openjdk:8-jre-slim
-# arm32 architecture:
+# armhf architecture:
 #FROM arm32v7/openjdk:8-jre-slim
 
 RUN apt update && apt upgrade -y && apt install -y wget

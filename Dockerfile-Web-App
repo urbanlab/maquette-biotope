@@ -1,6 +1,6 @@
-# x64 architecture:
+# amd64 architecture:
 FROM node:latest
-# arm32 architecture:
+# armhf architecture:
 #FROM arm32v7/node:6.11.5-slim
 
 WORKDIR /app
